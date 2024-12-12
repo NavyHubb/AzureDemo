@@ -3,7 +3,7 @@ on: # 워크플로우 실행 조건
   push: # main 브랜치에 푸시 발생했을 때
     branches: [main]
 jobs:
-  build and test:
+  build_and_test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
