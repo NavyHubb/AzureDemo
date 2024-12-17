@@ -3,10 +3,13 @@ server:
 spring:
   application:
     name: azure-demo
+  config:
+    activate:
+      on-profile: local
   datasource:
     url: jdbc:mysql://localhost:3306/azuredemo?useSSL=false&serverTimezone=UTC
-    username: root
-    password: sngjae972
+    username: ${LOCAL_MYSQL_USERNAME}
+    password: ${LOCAL_MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
