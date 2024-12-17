@@ -1,7 +1,9 @@
-name: demo  # 워크플로우 이름
+name: CI/CD pipeline  # 워크플로우 이름
+
 on: # 워크플로우 실행 조건
   push: # main 브랜치에 푸시 발생했을 때
     branches: [main]
+
 jobs:
   build_and_test:
     runs-on: ubuntu-latest
@@ -44,3 +46,6 @@ jobs:
         run: |
           rm -f ~/.gradle/caches/modules-2/modules-2.lock
           rm -f ~/.gradle/caches/modules-2/gc.properties
+
+      - name: Build Docker Image
+        run: docker build -t myapp:latest .
