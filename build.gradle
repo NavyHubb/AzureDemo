@@ -36,3 +36,7 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+jar {  // 빌드 이름 고정 - Azure App 배포 시 빌드 파일 타게팅을 위해
+    archiveFileName = 'app.jar'
+}
