@@ -64,7 +64,7 @@ jobs:
       - name: Download Docker Image Tag
         uses: actions/download-artifact@v4
         with:
-          name: docker-image-tag
+          name: spring-boot-app
           path: .
 
       # 2. Azure 로그인
