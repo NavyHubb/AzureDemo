@@ -13,9 +13,9 @@ jobs:
     name: Build and Test with Gradle and Docker
     runs-on: ubuntu-latest
     env:
-      DB_URL: ${{ secrets.PROD_MYSQL_URL }}
-      DB_USERNAME: ${{ secrets.PROD_MYSQL_USERNAME }}
-      DB_PASSWORD: ${{ secrets.PROD_MYSQL_PASSWORD }}
+      PROD_MYSQL_URL: ${{ secrets.PROD_MYSQL_URL }}
+      PROD_MYSQL_USERNAME: ${{ secrets.PROD_MYSQL_USERNAME }}
+      PROD_MYSQL_PASSWORD: ${{ secrets.PROD_MYSQL_PASSWORD }}
 
     steps:
       # 1. 코드 체크아웃
