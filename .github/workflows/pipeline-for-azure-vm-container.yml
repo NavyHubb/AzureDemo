@@ -86,6 +86,12 @@ jobs:
           key: ${{ secrets.AZURE_SSH_KEY }}
           port: 22
           script: |
+            # 명시적으로 변수 설정
+            export SPRING_DATASOURCE_URL=${{ secrets.PROD_MYSQL_URL }}
+            export SPRING_DATASOURCE_USERNAME=${{ secrets.PROD_MYSQL_USERNAME }}
+            export SPRING_DATASOURCE_PASSWORD=${{ secrets.PROD_MYSQL_PASSWORD }}
+            export SPRING_PROFILES_ACTIVE=prod
+            
             # Azure VM에서 Docker 로그인
             sudo docker login ${{ secrets.ACR_NAME }}.azurecr.io -u ${{ secrets.ACR_USERNAME }} -p ${{ secrets.ACR_PASSWORD }}
 
@@ -95,9 +101,12 @@ jobs:
             # 기존 컨테이너 종료 및 새로운 컨테이너 실행
             sudo docker stop spring-boot-app || true
             sudo docker rm spring-boot-app || true
-            sudo docker run -d --name spring-boot-app -p 80:80 \
-                    -e SPRING_DATASOURCE_URL=${{ secrets.PROD_MYSQL_URL }} \
-                    -e SPRING_DATASOURCE_USERNAME=${{ secrets.PROD_MYSQL_USERNAME }} \
-                    -e SPRING_DATASOURCE_PASSWORD=${{ secrets.PROD_MYSQL_PASSWORD }} \
-                    -e SPRING_PROFILES_ACTIVE=prod \
-                    ${{ secrets.ACR_NAME }}.azurecr.io/spring-boot-app:${{ github.sha }}
+            sudo docker run -d --name spring-boot-app -p 80:8080 \
+              -e SPRING_DATASOURCE_URL="$SPRING_DATASOURCE_URL" \
+              -e SPRING_DATASOURCE_USERNAME="$SPRING_DATASOURCE_USERNAME" \
+              -e SPRING_DATASOURCE_PASSWORD="$SPRING_DATASOURCE_PASSWORD" \
+              -e SPRING_PROFILES_ACTIVE="$SPRING_PROFILES_ACTIVE" \
+              ${{ secrets.ACR_NAME }}.azurecr.io/spring-boot-app:${{ github.sha }}
+
+            echo "Docker container running. Checking status..."
+            sudo docker ps
