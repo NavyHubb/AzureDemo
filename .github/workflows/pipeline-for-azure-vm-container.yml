@@ -47,33 +47,19 @@ jobs:
         run: |
           docker push ${{ secrets.ACR_NAME }}.azurecr.io/spring-boot-app:${{ github.sha }}
 
-      # 5. 빌드 아티팩트 저장
-      - name: Upload Docker Image Tag
-        uses: actions/upload-artifact@v4
-        with:
-          name: docker-image-tag
-          path: ${{ github.sha }}
-
   deploy:
     name: Deploy to Azure VM using Docker
     runs-on: ubuntu-latest
     needs: build  # 빌드 및 테스트 이후 실행
 
     steps:
-      # 1. 빌드 결과 다운로드 (Docker 이미지 태그 다운로드)
-      - name: Download Docker Image Tag
-        uses: actions/download-artifact@v4
-        with:
-          name: docker-image-tag
-          path: .
-
-      # 2. Azure 로그인
+      # 1. Azure 로그인
       - name: Azure Login
         uses: azure/login@v2
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # 3. Azure VM에 Docker 설치 확인
+      # 2. Azure VM에 Docker 설치 확인
       - name: Ensure Docker is Installed on Azure VM
         uses: appleboy/ssh-action@v0.1.1
         with:
@@ -87,7 +73,7 @@ jobs:
             sudo systemctl start docker
             sudo systemctl enable docker
 
-      # 4. Docker 이미지 다운로드 및 실행
+      # 3. Docker 이미지 다운로드 및 실행
       - name: Deploy Docker Image to Azure VM
         uses: appleboy/ssh-action@v0.1.1
         with:
@@ -105,4 +91,4 @@ jobs:
             # 기존 컨테이너 종료 및 새로운 컨테이너 실행
             sudo docker stop spring-boot-app || true
             sudo docker rm spring-boot-app || true
-            sudo docker run -d --name spring-boot-app -p 8080:8080 ${{ secrets.ACR_NAME }}.azurecr.io/spring-boot-app:${{ github.sha }}
+            sudo docker run -d --name spring-boot-app -p 80:80 ${{ secrets.ACR_NAME }}.azurecr.io/spring-boot-app:${{ github.sha }}
