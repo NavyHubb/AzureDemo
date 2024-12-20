@@ -7,7 +7,7 @@ spring:
     activate:
       on-profile: prod
   datasource:
-    url: jdbc:mysql://${PROD_MYSQL_URL}:3306/azuredemo?useSSL=true&requireSSL=true&serverTimezone=UTC
+    url: jdbc:mysql://db-demo-rg-demo.mysql.database.azure.com:3306/azuredemo?useSSL=true&requireSSL=true&serverTimezone=UTC
     username: ${PROD_MYSQL_USERNAME}
     password: ${PROD_MYSQL_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
