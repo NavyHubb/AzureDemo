@@ -95,4 +95,9 @@ jobs:
             # 기존 컨테이너 종료 및 새로운 컨테이너 실행
             sudo docker stop spring-boot-app || true
             sudo docker rm spring-boot-app || true
-            sudo docker run -d --name spring-boot-app -p 80:80 ${{ secrets.ACR_NAME }}.azurecr.io/spring-boot-app:${{ github.sha }}
+            sudo docker run -d --name spring-boot-app -p 80:80 \
+                    -e SPRING_DATASOURCE_URL=${{ secrets.PROD_MYSQL_URL }} \
+                    -e SPRING_DATASOURCE_USERNAME=${{ secrets.PROD_MYSQL_USERNAME }} \
+                    -e SPRING_DATASOURCE_PASSWORD=${{ secrets.PROD_MYSQL_PASSWORD }} \
+                    -e SPRING_PROFILES_ACTIVE=prod \
+                    ${{ secrets.ACR_NAME }}.azurecr.io/spring-boot-app:${{ github.sha }}
